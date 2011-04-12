@@ -9,6 +9,7 @@ package com.rd11.foursquare.signals
 	{
 
 		public const startupRequest:Signal = new Signal();
+		public const error:Signal = new Signal( String );
 		
 		public const authenticationRequest:Signal = new Signal( String, String );
 		public const authenticationResult:Signal = new Signal( String );
@@ -16,8 +17,11 @@ package com.rd11.foursquare.signals
 		public const userRequest:Signal = new Signal( UserVO, Boolean ); // BOOL = lazy load
 		public const userResult:Signal = new Signal( UserVO );
 		
-		public const checkinsRequest:Signal = new Signal();
-		public const checkinsResult:Signal = new Signal( Array );
+		public const checkinRequest:Signal = new Signal();
+		public const checkinResult:Signal = new Signal( String );
+		
+		public const feedRequest:Signal = new Signal();
+		public const feedResult:Signal = new Signal( Array );
 
 		public const nearbyRequest:Signal = new Signal( CityVO );
 		public const nearbyResult:Signal = new Signal( Array );

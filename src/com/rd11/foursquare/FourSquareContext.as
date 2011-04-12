@@ -47,7 +47,7 @@ package com.rd11.foursquare
 			signalCommandMap.mapSignal( foursquareSignalBus.startupRequest, StartupCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.authenticationRequest, AuthenticateCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.userRequest, UserDetailsCommand );
-			signalCommandMap.mapSignal( foursquareSignalBus.checkinsRequest, CheckinCommand );
+			signalCommandMap.mapSignal( foursquareSignalBus.feedRequest, CheckinCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.nearbyRequest, SearchCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.historyRequest, HistoryCommand );
 			

@@ -7,9 +7,7 @@
 package com.rd11.foursquare.services
 {
 	import com.adobe.serialization.json.JSON;
-	import com.rd11.foursquare.events.CheckinEvent;
 	import com.rd11.foursquare.events.ErrorEvent;
-	import com.rd11.foursquare.events.HistoryEvent;
 	import com.rd11.foursquare.events.SearchEvent;
 	import com.rd11.foursquare.models.FoursquareModel;
 	import com.rd11.foursquare.models.vo.CheckinVO;
@@ -23,10 +21,8 @@ package com.rd11.foursquare.services
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
-	import mx.rpc.Fault;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
@@ -81,7 +77,29 @@ package com.rd11.foursquare.services
 		 */		
 		public function checkin(shout:String="", venueVO:VenueVO=null):void
 		{
+			var service : HTTPService = new HTTPService();
+			service.method = URLRequestMethod.GET;
+			//confirm this
+			service.url = "https://api.foursquare.com/v2/users/self/checkins";
+			//service.useProxy = false;
+			
 			var params:Object = new Object();
+			params.oauth_token = foursquareModel.accessToken;
+
+			if (venueVO){
+				if( venueVO.id ) params.vid = venueVO.id;
+				if (venueVO.name.length > 1) params.venue = venueVO.name;
+			}
+			
+			if (shout.length > 1) params.shout = shout;
+			
+			
+			service.addEventListener(ResultEvent.RESULT, onResult_checkin );
+			service.addEventListener(FaultEvent.FAULT, onFault );
+			
+			service.send(params);
+			
+			/*var params:Object = new Object();
 			if (venueVO){
 				if( venueVO.id ) params.vid = venueVO.id;
 				if (venueVO.name.length > 1) params.venue = venueVO.name;
@@ -98,7 +116,7 @@ package com.rd11.foursquare.services
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			loader.addEventListener(Event.COMPLETE, onSuccess_checkin);
-			loader.load(request);
+			loader.load(request);*/
 		}
 		
 		/**
@@ -135,7 +153,7 @@ package com.rd11.foursquare.services
 			}
 			
 			service.addEventListener(ResultEvent.RESULT, onResult_getHistory );
-			service.addEventListener(FaultEvent.FAULT, onFault_getHistory );
+			service.addEventListener(FaultEvent.FAULT, onFault );
 			
 			service.send(params);
 		}
@@ -229,13 +247,19 @@ package com.rd11.foursquare.services
 		// HANDLERS
 		//*****************************************	
 		
+		private function onResult_checkin(event : ResultEvent):void{
+			var jsonObj:Object = JSON.decode( event.result as String );
+			var message:String = jsonObj.response.message;
+			bus.checkinResult.dispatch( message );
+		}
+		
 		private function onResult_getHistory(event : ResultEvent):void{
 			var jsonObj:Object = JSON.decode( event.result as String );
 			var venues:Array = jsonObj.response.venues.items;
 			bus.historyResponse.dispatch( venues );
 		}
 
-		private function onFault_getHistory(event : FaultEvent):void{
+		private function onFault(event : FaultEvent):void{
 			var errorEvent: ErrorEvent = new ErrorEvent( ErrorEvent.ERROR );
 			errorEvent.error = new Error( event.fault.faultDetail );
 			dispatch( errorEvent );
@@ -255,7 +279,7 @@ package com.rd11.foursquare.services
 				checkins.push( new CheckinVO( XMLUtil.XMLToObject( checkin.children() )) );
 			}
 			
-			bus.checkinsRequest.dispatch( checkins );
+			bus.feedResult.dispatch( checkins );
 		}
 		
 		/**
@@ -293,12 +317,12 @@ package com.rd11.foursquare.services
 		 * @param event
 		 * 
 		 */		
-		private function onSuccess_checkin(event:Event):void{
+		/*private function onSuccess_checkin(event:Event):void{
 			var xml:XML = new XML((event.target as URLLoader).data);
 			var checkinEvent:CheckinEvent = new CheckinEvent( CheckinEvent.CHECKIN_SUCCESS );
 			checkinEvent.message = xml..message;
 			dispatch( checkinEvent );
-		}
+		}*/
 		
 		/**
 		 * returns my details 
@@ -347,10 +371,6 @@ package com.rd11.foursquare.services
 		//*****************************************
 		// ERROR HANDLERS
 		//*****************************************	
-		
-		private function onFault(event:FaultEvent):void{
-			
-		}
 		
 		/*private function onLoginError(event:IOErrorEvent):void{
 			var errorMessage : String = "Incorrect username/password or couldnt talk to foursquare";

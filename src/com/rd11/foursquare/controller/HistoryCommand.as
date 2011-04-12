@@ -34,7 +34,12 @@ package com.rd11.foursquare.controller
 		
 		override public function execute():void{
 			bus.historyResponse.add( historyReturned );
-			getHistory();
+			
+			if( model.accessToken ){
+				getHistory();
+			}else{
+				bus.error.dispatch( "missing token, please sign in to foursquare" );
+			}
 		}
 		
 		private function getHistory():void{

@@ -71,7 +71,7 @@ package com.rd11.foursquare.controller
 		}
 		
 		private function getFeed():void{
-			bus.checkinsResult.add( onCheckinResult );
+			bus.feedRequest.add( onCheckinResult );
 			service.getFeed();
 		}
 		
