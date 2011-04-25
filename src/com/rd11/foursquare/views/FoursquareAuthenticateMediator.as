@@ -46,16 +46,8 @@ package com.rd11.foursquare.views
 		private function locationChangeHandler( location : String ):void{
 			if (location.search('#access_token=') > -1){
 				var accessToken:String = location.substr(location.search('=') + 1);
-				saveToken(accessToken);
 				signalBus.authenticationResult.dispatch( accessToken );
 			}
-		}
-		
-		protected function saveToken(token : String) : void
-		{
-			var so : SharedObject = SharedObject.getLocal("foursquare");
-			so.data["accessToken"] = token;
-			so.flush();
 		}
 		
 	}

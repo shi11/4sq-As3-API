@@ -8,6 +8,7 @@
 package com.rd11.foursquare.models
 {
 	//import flash.filesystem.File;
+	import flash.net.SharedObject;
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
@@ -44,6 +45,10 @@ package com.rd11.foursquare.models
 		public function set accessToken(value:String):void
 		{
 			_accessToken = value;
+			
+			var so : SharedObject = SharedObject.getLocal("foursquare");
+			so.data["accessToken"] = _accessToken;
+			so.flush();
 		}
 
 		
