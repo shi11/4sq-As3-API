@@ -41,6 +41,8 @@ package com.rd11.foursquare.views
 					"client_id="+clientId+
 					"&response_type=token" +
 					"&redirect_uri="+redirectURI );
+		
+			signalBus.authenticationRequest.dispatch();
 		}
 		
 		private function locationChangeHandler( location : String ):void{

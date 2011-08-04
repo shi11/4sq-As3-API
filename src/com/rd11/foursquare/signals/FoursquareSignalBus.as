@@ -11,7 +11,7 @@ package com.rd11.foursquare.signals
 		public const startupRequest:Signal = new Signal();
 		public const error:Signal = new Signal( String );
 		
-		public const authenticationRequest:Signal = new Signal( String, String );
+		public const authenticationRequest:Signal = new Signal( );
 		public const authenticationResult:Signal = new Signal( String );
 		
 		public const userRequest:Signal = new Signal( UserVO, Boolean ); // BOOL = lazy load
