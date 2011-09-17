@@ -7,6 +7,6 @@ package  com.rd11.foursquare.views.interfaces
 	public interface ILocationView
 	{
 		function get nearbyRequest():ISignal;
-		function set nearbyResults( results: ArrayCollection ):void;
+		function setNearbyResults( results: ArrayCollection ):void;
 	}
 }

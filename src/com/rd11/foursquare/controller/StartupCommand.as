@@ -28,7 +28,7 @@ package com.rd11.foursquare.controller
 			if( !accessToken ) accessToken = "";
 			else foursquareModel.accessToken = accessToken;
 			
-			bus.authenticationResult.dispatch( accessToken );
+			bus.startupResponse.dispatch( accessToken );
 		}
 	}
 }

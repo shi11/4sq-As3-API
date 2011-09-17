@@ -9,6 +9,8 @@ package com.rd11.foursquare.signals
 	{
 
 		public const startupRequest:Signal = new Signal();
+		public const startupResponse:Signal = new Signal( String );
+		
 		public const error:Signal = new Signal( String );
 		
 		public const authenticationRequest:Signal = new Signal( );

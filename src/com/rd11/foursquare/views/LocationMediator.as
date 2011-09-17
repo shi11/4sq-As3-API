@@ -42,7 +42,7 @@ package com.rd11.foursquare.views
 		}
 		
 		public function onNearbyResults( results: ArrayCollection ):void{
-			//searchView.results = results;
+			view.setNearbyResults( results );
 		}
 		
 		/*private function getUserLocation():void{
