@@ -49,7 +49,7 @@ package com.rd11.foursquare.controller
 		 * 
 		 */		
 		private function query(cityVO:CityVO, keywords:String=null):void{
-			service.getVenues(	cityVO.geolat, cityVO.geolong, 25, 10, keywords );
+			service.getVenues(	cityVO.geolat, cityVO.geolong, keywords );
 		}
 		
 		/**
@@ -57,8 +57,8 @@ package com.rd11.foursquare.controller
 		 * @param results
 		 * 
 		 */		
-		private function handleQuery(results : ArrayCollection):void{
-			bus.nearbyResult.dispatch( results );
+		private function handleQuery(results : Array):void{
+			//bus.nearbyResult.dispatch( results );
 		}
 	}	
 }

@@ -25,8 +25,10 @@ package com.rd11.foursquare.signals
 		public const feedRequest:Signal = new Signal();
 		public const feedResult:Signal = new Signal( Array );
 
-		public const nearbyRequest:Signal = new Signal( CityVO );
+		public const nearbyRequest:Signal = new Signal( CityVO, String );
 		public const nearbyResult:Signal = new Signal( Array );
+		
+		public const venueSelected:Signal = new Signal( Object );
 		
 		public const historyRequest:Signal = new Signal();
 		public const historyResponse:Signal = new Signal( Array ); 

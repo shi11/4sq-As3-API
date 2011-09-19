@@ -10,6 +10,7 @@ package com.rd11.foursquare
 	import com.rd11.foursquare.controller.AuthenticateCommand;
 	import com.rd11.foursquare.controller.CheckinCommand;
 	import com.rd11.foursquare.controller.HistoryCommand;
+	import com.rd11.foursquare.controller.SaveVenueCommand;
 	import com.rd11.foursquare.controller.SearchCommand;
 	import com.rd11.foursquare.controller.StartupCommand;
 	import com.rd11.foursquare.controller.UserDetailsCommand;
@@ -50,6 +51,7 @@ package com.rd11.foursquare
 			signalCommandMap.mapSignal( foursquareSignalBus.feedRequest, CheckinCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.nearbyRequest, SearchCommand );
 			signalCommandMap.mapSignal( foursquareSignalBus.historyRequest, HistoryCommand );
+			signalCommandMap.mapSignal( foursquareSignalBus.venueSelected, SaveVenueCommand );
 			
 			//map model
 			injector.mapSingleton( FoursquareModel );

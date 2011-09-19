@@ -40,10 +40,12 @@ package com.rd11.foursquare.services
 		[Inject]
 		public var bus:FoursquareSignalBus;
 		
-		private var _url : String = "http://api.foursquare.com/v1/";
+		private var _url : String = "http://api.foursquare.com/v2/";
 		
 		private var consumerKey : String = '266d5934f6cb223fcd5ffc75eeb0a99404acf504c';
 		private var consumerSecret : String = '6265da6ce9bd8cb2c69632ae51836327';
+		
+		private static const DATEVERIFIED : String = "20110917"
 		
 		private var oauth : IOAuth;
 		
@@ -98,25 +100,6 @@ package com.rd11.foursquare.services
 			service.addEventListener(FaultEvent.FAULT, onFault );
 			
 			service.send(params);
-			
-			/*var params:Object = new Object();
-			if (venueVO){
-				if( venueVO.id ) params.vid = venueVO.id;
-				if (venueVO.name.length > 1) params.venue = venueVO.name;
-			}
-			
-			if (shout.length > 1) params.shout = shout;
-			
-			var request : URLRequest = oauth.buildRequest(
-				URLRequestMethod.POST,
-				_url+"checkin.xml",
-				foursquareModel.oauth_token,
-				params);
-			
-			var loader : URLLoader = new URLLoader();
-			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-			loader.addEventListener(Event.COMPLETE, onSuccess_checkin);
-			loader.load(request);*/
 		}
 		
 		/**
@@ -124,7 +107,7 @@ package com.rd11.foursquare.services
 		 */		
 		public function getFeed():void
 		{
-			var request : URLRequest = oauth.buildRequest(
+			/*var request : URLRequest = oauth.buildRequest(
 				URLRequestMethod.GET, 
 				_url+'checkins.json',
 				foursquareModel.oauth_token);
@@ -132,7 +115,7 @@ package com.rd11.foursquare.services
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			loader.addEventListener(Event.COMPLETE, onResult_getFeed);
-			loader.load(request);
+			loader.load(request);*/
 		}
 		
 		/**
@@ -144,7 +127,6 @@ package com.rd11.foursquare.services
 			var service : HTTPService = new HTTPService();
 			service.method = URLRequestMethod.GET;
 			service.url = "https://api.foursquare.com/v2/users/self/venuehistory";
-			//service.useProxy = false;
 			
 			var params:Object = new Object();
 			params.oauth_token = foursquareModel.accessToken;
@@ -192,7 +174,7 @@ package com.rd11.foursquare.services
 		 */	
 		public function getUserDetails(userVO:UserVO, lazy:Boolean):void
 		{
-			var params : Object = new Object();
+			/*var params : Object = new Object();
 			if(userVO.id){
 				params.uid = userVO.id;
 				params.badges = lazy;
@@ -207,7 +189,7 @@ package com.rd11.foursquare.services
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			loader.addEventListener(Event.COMPLETE, onResult_getUserDetails);
-			loader.load(request);
+			loader.load(request);*/
 		}
 		
 		/**
@@ -218,25 +200,25 @@ package com.rd11.foursquare.services
 		 * l - limit of results (optional, default 10)
 		 * q - keyword search (optional)
 		 */
-		public function getVenues(geolat:Number, geolong:Number, r:Number=25, l:int=10, q:String=null):void
+		public function getVenues(geolat:Number, geolong:Number, q:String=null):void
 		{
-			var params : Object = new Object();
-			params.geolat = geolat;
-			params.geolong = geolong;
-			params.r = r;
-			params.l = l;
-			if(q) params.q = q;
 			
-			var request : URLRequest = oauth.buildRequest(
-				URLRequestMethod.GET,
-				_url+"venues.xml",
-				foursquareModel.oauth_token,
-				params);
+			var service : HTTPService = new HTTPService();
+			service.method = URLRequestMethod.GET;
+			service.url = "https://api.foursquare.com/v2/venues/search";
 			
-			var loader : URLLoader = new URLLoader();
-			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-			loader.addEventListener(Event.COMPLETE, onReturned_venues);
-			loader.load(request);
+			var params:Object = new Object();
+			params.client_id = consumerKey;
+			params.client_secret = consumerSecret;
+			params.ll = geolat + "," + geolong;
+			if(q) params.query = q;
+			
+			params.v = DATEVERIFIED;
+			
+			service.addEventListener(ResultEvent.RESULT, onResult_getVenues );
+			service.addEventListener(FaultEvent.FAULT, onFault );
+			
+			service.send(params);
 		}
 		
 		public function listCities():void
@@ -289,53 +271,6 @@ package com.rd11.foursquare.services
 		 * @param event
 		 * 
 		 */		
-		/*private function onResult_getHistory(event : Event):void{
-			var xml:XML = new XML((event.target as URLLoader).data);
-
-			var history:Dictionary = new Dictionary();
-			for each( var checkin:XML in xml..checkin){
-
-				var day:String = checkin.created.slice(0,14);
-
-				//if date is new to dictionary, create new ArrayCollection
-				if( !history[day] ) history[day] = new ArrayCollection();
-
-				//add item.
-				history[day].addItem(	new CheckinVO(
-					XMLUtil.XMLToObject( checkin.children() )
-					));
-			}
-
-			//dispatch event
-			var historyEvent:HistoryEvent = new HistoryEvent(HistoryEvent.READ_RETURNED);
-			historyEvent.history = history;
-			dispatch( historyEvent );
-		}*/
-		
-		/**
-		 * returned from adding a checkin 
-		 * @param event
-		 * 
-		 */		
-		/*private function onSuccess_checkin(event:Event):void{
-			var xml:XML = new XML((event.target as URLLoader).data);
-			var checkinEvent:CheckinEvent = new CheckinEvent( CheckinEvent.CHECKIN_SUCCESS );
-			checkinEvent.message = xml..message;
-			dispatch( checkinEvent );
-		}*/
-		
-		/**
-		 * returns my details 
-		 * @param event
-		 * 
-		 */		
-		/*private function onResult_getMyDetails(event:Event):void{
-			var xml:XML = new XML((event.target as URLLoader).data);
-			
-			var userEvent:UserEvent = new UserEvent( UserEvent.MY_DETAILS_GOT );
-			userEvent.userVO = new UserVO( XMLUtil.XMLToObject(xml.children()) );
-			dispatch( userEvent );
-		}*/
 		
 		/**
 		 * returns userdetails 
@@ -353,8 +288,12 @@ package com.rd11.foursquare.services
 		 * @param event
 		 * 
 		 */		
-		private function onReturned_venues(event:Event) : void {
-			var venues:Array = new Array();
+		private function onResult_getVenues(event:ResultEvent) : void {
+			var results:Object = JSON.decode( event.result as String );
+			var venues:Array = results.response.venues;
+			bus.nearbyResult.dispatch( venues );
+			
+			/*var venues:Array = new Array();
 			var xml:XML = new XML((event.target as URLLoader).data);
 			
 			//loop through xml and create VOs
@@ -365,7 +304,7 @@ package com.rd11.foursquare.services
 			//dispatch event
 			var searchEvent:SearchEvent = new SearchEvent(SearchEvent.QUERY_RETURNED);
 			searchEvent.results = new ArrayCollection( venues );
-			dispatch( searchEvent );
+			dispatch( searchEvent );*/
 		}
 		
 		//*****************************************

@@ -39,26 +39,6 @@ package com.rd11.foursquare.controller
 		
 		override public function execute():void{
 			getFeed();
-			/*switch(event.type){
-				case CheckinEvent.CHECKIN:
-					createCheckin( event ); 
-					break;
-				case CheckinEvent.READ:
-					getFeed();
-					break;
-				case CheckinEvent.READ_RETURNED:
-					feedGot( event.checkins );
-					break;
-				case CheckinEvent.CHECKIN_SUCCESS:
-					handleCheckin(event.message);
-					break;
-				case CheckinEvent.CHANGE_POLL_INTERVAL:
-					checkinMediator.pollInterval = (event as CheckinEvent).interval;
-					break;
-				case CheckinEvent.TOGGLE_GROWL_MESSAGING:
-					mainViewMediator.showGrowl =  (event as CheckinEvent).useGrowl;
-					break;
-			}*/
 		}
 		
 		private function createCheckin( event : CheckinEvent ):void{

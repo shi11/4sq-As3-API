@@ -53,11 +53,11 @@ package com.rd11.foursquare.views
 		override public function onRegister() : void
 		{
 			view.feedRequest.add( getCheckins );
-			bus.checkinsResult.add( onResult_getCheckins );
+			bus.feedResult.add( onResult_getCheckins );
 		}
 		
 		private function getCheckins():void{
-			bus.checkinsRequest.dispatch();
+			bus.feedRequest.dispatch();
 		}
 		
 		private function onResult_getCheckins( data:Array ):void{

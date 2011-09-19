@@ -2,12 +2,11 @@
 // Project: foursquare 
 // Author: Seth Hillinger
 // Created: Jan 23, 2010 
-// Updated: Feb 12, 2011 
+// Updated: Sep 19, 2011 
 ////////////////////////////////////////////////////////////
 
 package com.rd11.foursquare.models
 {
-	//import flash.filesystem.File;
 	import flash.net.SharedObject;
 	import flash.utils.Dictionary;
 	
@@ -29,32 +28,6 @@ package com.rd11.foursquare.models
 		 */		
 		public var currentVersion:String;
 		
-		private var _accessToken : String;
-
-		/**
-		 * accesstoken 
-		 */
-		public function get accessToken():String
-		{
-			return _accessToken;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set accessToken(value:String):void
-		{
-			_accessToken = value;
-			
-			var so : SharedObject = SharedObject.getLocal("foursquare");
-			so.data["accessToken"] = _accessToken;
-			so.flush();
-		}
-
-		
-		//TODO Seth: remove this.
-		public var oauth_token : OAuthToken;
-		
 		/**
 		 * used for autologin 
 		 */		
@@ -75,10 +48,39 @@ package com.rd11.foursquare.models
 		 */		
 		public var feed:ArrayCollection=new ArrayCollection();
 		
+		/**
+		 * oauth2 token 
+		 */		
+		private var _accessToken : String;
+		
+		/**
+		 * selectedVenue 
+		 */		
+		public var selectedVenue:Object;
+		
+
+		/**
+		 * accesstoken 
+		 */
+		public function get accessToken():String
+		{
+			return _accessToken;
+		}
+		/**
+		 * @private
+		 */
+		public function set accessToken(value:String):void
+		{
+			_accessToken = value;
+			
+			var so : SharedObject = SharedObject.getLocal("foursquare");
+			so.data["accessToken"] = _accessToken;
+			so.flush();
+		}
+
 		public function FoursquareModel()
 		{
 			super();
-			//oauthFile = File.applicationStorageDirectory.resolvePath("user/oauth_token.xml");
 		}
 		
 		public function log(value:String):void{
