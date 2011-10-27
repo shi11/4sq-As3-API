@@ -6,7 +6,6 @@
 
 package com.rd11.foursquare.services
 {
-	import com.adobe.serialization.json.JSON;
 	import com.rd11.foursquare.events.ErrorEvent;
 	import com.rd11.foursquare.events.SearchEvent;
 	import com.rd11.foursquare.models.FoursquareModel;
@@ -230,13 +229,13 @@ package com.rd11.foursquare.services
 		//*****************************************	
 		
 		private function onResult_checkin(event : ResultEvent):void{
-			var jsonObj:Object = JSON.decode( event.result as String );
+			var jsonObj:Object = JSON.parse( event.result as String );
 			var message:String = jsonObj.response.message;
 			bus.checkinResult.dispatch( message );
 		}
 		
 		private function onResult_getHistory(event : ResultEvent):void{
-			var jsonObj:Object = JSON.decode( event.result as String );
+			var jsonObj:Object = JSON.parse( event.result as String );
 			var venues:Array = jsonObj.response.venues.items;
 			bus.historyResponse.dispatch( venues );
 		}
@@ -278,7 +277,7 @@ package com.rd11.foursquare.services
 		 * 
 		 */		
 		private function onResult_getUserDetails(event:Event):void{
-			var obj:Object = JSON.decode( event.target.data );
+			var obj:Object = JSON.parse( event.target.data );
 			var userVO:UserVO = new UserVO( obj.user );
 			bus.userResult.dispatch( userVO );
 		}
@@ -289,7 +288,7 @@ package com.rd11.foursquare.services
 		 * 
 		 */		
 		private function onResult_getVenues(event:ResultEvent) : void {
-			var results:Object = JSON.decode( event.result as String );
+			var results:Object = JSON.parse( event.result as String );
 			var venues:Array = results.response.venues;
 			bus.nearbyResult.dispatch( venues );
 			
